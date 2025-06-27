@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evento - Event Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor1.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<header class="header">
+  <a href="#" class="logo"><span>E</span>vento</a>
+  <nav class="navbar">
+    <a href="#home">Home</a>
+    <a href="#service">Service</a>
+    <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
+    <a href="\catering">Food</a>
+    <a href="#price">Price</a>
+    <a href="#review">Review</a>
+    <a href="#contact">Contact</a>
+    
+
+  </nav>
+  <button id="vendor-toggle" aria-label="Toggle Vendors">
+    <i class="fas fa-users"></i> </button>
+  <button id="theme-toggle" aria-label="Toggle Theme">🌙</button>
+</header>
+
+<div class="vendor-sidebar" id="vendor-sidebar">
+  <div class="vendor-sidebar-header">
+    <h3>Our Trusted Vendors</h3>
+    <button class="vendor-close-btn" id="vendor-close-btn">&times;</button>
+  </div>
+  <div class="vendor-list">
+    <div class="vendor-item">
+      <h4>Dream Decorators</h4>
+      <p>Specialty: Wedding & Event Decorations</p>
+      <p>Contact: +91 98765 43210</p>
+      <p>Email: info.dreamdecor@example.com</p>
+    </div>
+    <div class="vendor-item">
+      <h4>Gourmet Caterers</h4>
+      <p>Specialty: Multi-cuisine Catering</p>
+      <p>Contact: +91 91234 56789</p>
+      <p>Email: gourmet.catering@example.com</p>
+    </div>
+    <div class="vendor-item">
+      <h4>Flash Photography</h4>
+      <p>Specialty: Event Photography & Videography</p>
+      <p>Contact: +91 87654 32109</p>
+      <p>Email: flash.photo@example.com</p>
+    </div>
+    <div class="vendor-item">
+      <h4>Beat Masters DJ</h4>
+      <p>Specialty: Live DJ & Sound Systems</p>
+      <p>Contact: +91 76543 21098</p>
+      <p>Email: beatmasters@example.com</p>
+    </div>
+    <div class="vendor-item">
+      <h4>Blossom Florists</h4>
+      <p>Specialty: Fresh Flower Arrangements</p>
+      <p>Contact: +91 65432 10987</p>
+      <p>Email: blossom.florists@example.com</p>
+    </div>
+     <div class="vendor-item">
+      <h4>Elite Security Services</h4>
+      <p>Specialty: Event Security & Crowd Control</p>
+      <p>Contact: +91 99887 76655</p>
+      <p>Email: elite.security@example.com</p>
+    </div>
+  </div>
+</div>
+
+<section id="home" class="home">
+  <div class="content">
+    <h1>Welcome to Evento</h1>
+    <p>Your dream event, our responsibility</p>
+    <a href="#contact" class="btn">Get Started</a>
+  </div>
+</section>
+
+<section id="service" class="service">
+  <h2 class="heading">Our Services</h2>
+  <div class="box-container">
+    <a href="/marrageg"><div class="box">Wedding Planning</div></a>
+    <a href="/birthday"><div class="box">Birthday Parties</div></a>
+    <a href="/corporate"><div class="box">Corporate Events</div></a>
+    <a href="/engment"><div class="box">Engagements</div></a>
+    <a href="/festival"><div class="box">Festivals</div></a>
+    <a href="/chatbot"><div class="box">Technology Expos</div></a>
+    <a href="/naming"><div class="box">Naming Ceremony</div></a>
+    <a href="/Haldimhendi"><div class="box">Haldi Function</div></a>
+    <a href="/birthday"><div class="box">Freshers</div></a>
+  </div>
+</section>
+
+
+<section id="gallery" class="gallery">
+  <h2 class="heading">Gallery</h2>
+  <div class="container">
+    <a href="/marrageg"><img src="{{ url_for('static', filename='One.png') }}" alt="Wedding Setup"/></a>
+    <a href="/birthday"><img src="{{ url_for('static', filename='Two.png') }}" alt="Birthday Party Setup" /></a>
+    <a href="/corporate"><img src="{{ url_for('static', filename='Three.png') }}" alt="Corporate Event Hall" /></a>
+    <a href="/engment"><img src="{{ url_for('static', filename='Four.png') }}" alt="Engagement Ceremony" /></a>
+    <a href="/festival"><img src="{{ url_for('static', filename='Five.png') }}" alt="Festival Decoration" /></a>
+    <a href="/naming"><img src="{{ url_for('static', filename='Six.png') }}" alt="naming ceremony" /></a>
+  </div>
+</section>
+
+<!-- <section id="food" class="food">
+  <h2 class="heading">Our Food Menu</h2> -->
+
+  <!-- <div class="category">
+    <h3>🥗 Veg Main Courses</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Paneer Butter Masala</label>
+      <label><input type="checkbox"> Chole Bhature</label>
+      <label><input type="checkbox"> Vegetable Biryani</label>
+      <label><input type="checkbox"> Dal Makhani</label>
+      <label><input type="checkbox"> Aloo Gobi</label>
+      <label><input type="checkbox"> Mix veg</label>
+      <label><input type="checkbox"> Palakh Panner</label>
+      <label><input type="checkbox"> Shev Bhaji</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🥟 Veg Snacks & Starters</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Samosas</label>
+      <label><input type="checkbox"> Poha</label>
+      <label><input type="checkbox"> Idle</label>
+      <label><input type="checkbox"> Kachori</label>
+      <label><input type="checkbox"> Pakoras</label>
+      <label><input type="checkbox"> Dhokla</label>
+      <label><input type="checkbox"> Veg Cutlets</label>
+      <label><input type="checkbox"> Vada Pav</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🍞 Breads & Rice</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Naan</label>
+      <label><input type="checkbox"> Roti</label>
+      <label><input type="checkbox"> Dal Baath</label>
+      <label><input type="checkbox"> Tandoor</label>
+      <label><input type="checkbox"> Jeera Rice</label>
+      <label><input type="checkbox"> Pulao</label>
+      <label><input type="checkbox"> Culcha</label>
+      <label><input type="checkbox"> Khichadi</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🍮 Veg Desserts</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Gulab Jamun</label>
+      <label><input type="checkbox"> Rasgulla</label>
+      <label><input type="checkbox"> Kheer</label>
+      <label><input type="checkbox"> Cake</label>
+      <label><input type="checkbox"> Kaju Katli</label>
+      <label><input type="checkbox"> Sooji Halwa</label>
+      <label><input type="checkbox"> Jalebi</label>
+      <label><input type="checkbox"> Ladoo</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🍗 Non-Veg Main Courses</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Chicken Curry</label>
+      <label><input type="checkbox"> Mutton Rogan Josh</label>
+      <label><input type="checkbox"> Fish Fry</label>
+      <label><input type="checkbox"> Chicken Tikka Masala</label>
+      <label><input type="checkbox"> Amritsari Fish</label>
+      <label><input type="checkbox"> Fish Fry</label>
+      <label><input type="checkbox"> Egg Curry</label>
+      <label><input type="checkbox"> Butter Chicken</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🍖 Non-Veg Snacks & Starters</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Chicken Tikka</label>
+      <label><input type="checkbox"> Seekh Kebabs</label>
+      <label><input type="checkbox"> Fish Pakoras</label>
+      <label><input type="checkbox"> Egg Rolls</label>
+      <label><input type="checkbox"> Chicken Patties</label>
+      <label><input type="checkbox"> Kebab chaat</label>
+      <label><input type="checkbox"> Egg Rolls</label>
+      <label><input type="checkbox"> Chicken Lollipop</label>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>🍚 Biryani & Rice Dishes</h3>
+    <div class="grid">
+      <label><input type="checkbox"> Chicken Biryani</label>
+      <label><input type="checkbox"> Mutton Pulao</label>
+      <label><input type="checkbox"> Fish Biryani</label>
+      <label><input type="checkbox"> Chilli Fish Biryani</label>
+      <label><input type="checkbox"> Kaju Soya Biryani</label>
+      <label><input type="checkbox"> Delhi Biryani</label>
+      <label><input type="checkbox"> Hyderabadi Biryani</label>
+      <label><input type="checkbox"> Kaju Soya Biryani</label>
+    </div>
+  </div>
+
+  <button class="btn" onclick="saveSelections()">Save Selections</button>
+</section> -->
+
+<section id="price" class="price">
+  <h2 class="heading">Pricing</h2>
+  <div class="box-container">
+    <div class="box">
+      <h3>Basic Package</h3>
+      <p>₹9,999</p>
+      <ul style="list-style-type:disc;">
+  <li>Simple, elegant decor with limited palette.</li>
+  <li>Basic buffet with limited menu.</li>
+  <li>Essential on-site coordination.</li>
+  <li>Single photographer for fixed duration.</li>
+  <li>Standard portable stage.</li>
+</ul>
+    </div>
+    <div class="box">
+      <h3>Standard Package</h3>
+      <p>₹24,999</p>
+      <ul style="list-style-type:disc;">
+  <li>More elaborate decor themes available.</li>
+  <li>Expanded buffet with more variety.</li>
+  <li>Dedicated coordinator and small support team.</li>
+  <li>One photographer and one videographer.</li>
+  <li>Larger modular stage with customizable backdrop.</li>
+</ul>
+
+    </div>
+    <div class="box">
+      <h3>Premium Package</h3>
+      <p>₹49,999</p>
+      <ul style="list-style-type:disc;">
+  <li>Enhanced decor with accent lighting and props.</li>
+  <li>Upgraded buffet with a carving station or dessert bar.</li>
+  <li>Two event managers and a dedicated guest desk.</li>
+  <li>One photographer, one videographer, with basic edits.</li>
+  <li>Themed stage backdrop with basic lighting effects.</li>
+</ul>
+
+    </div>
+    <div class="box">
+      <h3>Silver Package</h3>
+      <p>₹75,999</p>
+      <ul style="list-style-type:disc;">
+  <li>Customizable decor with premium fabrics.</li>
+  <li>Choice of buffet or limited plated meal.</li>
+  <li>Lead event manager and dedicated hospitality team.</li>
+  <li>Two photographers, one videographer, plus drone.</li>
+  <li>Professionally designed with LED integration.</li>
+</ul>
+      </div>
+      <div class="box">
+      <h3>Gold Package</h3>
+      <p>₹99,000</p>
+      <ul style="list-style-type:disc;">
+  <li>Full-service bespoke design with high-end florals.</li>
+  <li>Plated fine dining with gourmet options.</li>
+  <li>Senior event manager and full staff for VIPs.</li>
+  <li>Multiple photographers/videographers, live stream.</li>
+  <li>Custom-built stage with large LED video wall.</li>
+</ul>
+      </div>
+      <div class="box">
+      <h3>Platinum Package</h3>
+      <p>₹1,29,999</p>
+      <ul style="list-style-type:disc;">
+  <li>Architectural and experiential venue transformation.</li>
+  <li>Celebrity chef menu with molecular gastronomy.</li>
+  <li>Executive event director with white-glove personal service.</li>
+  <li>Renowned crew, cinematic film production, instant social media.</li>
+  <li>Grand custom design with advanced tech and theatrical effects.</li>
+</ul>
+    </div>
+  </div>
+</section>
+
+<section id="review" class="review">
+  <h2 class="heading">Client Reviews</h2>
+  <ul>
+    <li>Evento made my wedding day magical! The attention to detail and professional service exceeded all expectations. Highly recommend!</li>
+    <li>Professional team and amazing service. They handled everything seamlessly and made our corporate event a huge success. 5 stars!</li>
+    <li>From planning to execution, everything was perfect. The team at Evento truly understands how to make dreams come true!</li>
+  </ul>
+</section>
+
+<section id="about" class="about">
+  <h2 class="heading">About Us</h2>
+  <p>Evento is a premier event management company committed to turning your special occasions into unforgettable memories. With years of experience and a passion for creativity, we design and execute flawless events tailored to your vision. From weddings and birthdays to corporate events and festivals, we handle everything with professionalism and care. Our dedicated team ensures every detail is planned to perfection, leaving you stress-free and smiling. We believe in combining tradition with innovation to bring your dreams to life. With trusted vendors, stunning décor, and seamless coordination, Evento delivers excellence every time. Customer satisfaction is at the heart of everything we do. Choose Evento — where your event becomes a story worth telling.</p>
+</section>
+
+<section id="contact" class="contact">
+  <h2 class="heading">Contact Us</h2>
+  <form onsubmit="handleSubmit(event)">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit" class="btn">Send Message</button>
+  </form>
+</section>
+
+<footer class="footer">
+  <table>
+    <tr>
+      <th style="color: var(--primary-color);">Quick Links</th>
+      <th style="color: var(--primary-color);">Contact Info</th>
+      <th style="color: var(--primary-color);">Follow Us</th>
+    </tr>
+    <tr>
+      <th><a href="#home">Home</a></th>
+      <th>📞 8767791326</th>
+      <th>🐦 Twitter</th>
+    </tr>
+    <tr>
+      <th><a href="#service">Service</a></th>
+      <th>📞 100-400-7264</th>
+      <th>💼 LinkedIn</th>
+    </tr>
+    <tr>
+      <th><a href="#about">About</a></th>
+      <th>📞 8767173741</th>
+      <th>👻 Snapchat</th>
+    </tr>
+    <tr>
+      <th><a href="#gallery">Gallery</a></th>
+      <th>📧 vivekadekar@gmail.com</th>
+      <th>📷 Instagram</th>
+    </tr>
+    <tr>
+      <th><a href="#price">Pricing</a></th>
+      <th>📧 harshu@gmail.com</th>
+      <th>📘 Facebook</th>
+    </tr>
+    <tr>
+      <th><a href="#contact">Contact</a></th>
+      <th>📧 sahyadrichalak@gmail.com</th>
+      <th></th>
+    </tr>
+  </table>
+</footer>
+
+<div class="chatbot-container">
+  <button class="chatbot-toggle" id="chatbot-toggle">💬</button>
+  
+  <div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+      <h3>Evento Assistant</h3>
+      <div class="status">🟢 Online - Ready to help!</div>
+      <button class="chatbot-close" id="chatbot-close">×</button>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="message bot">
+        <div class="message-bubble">
+          Hello! 👋 I'm your Evento assistant. I'm here to help you plan the perfect event! How can I assist you today?
+        </div>
+        <div class="message-time">Just now</div>
+      </div>
+    </div>
+    
+    <div class="quick-options" id="quick-options">
+      <button class="quick-option" onclick="sendQuickMessage('Our Services')">Our Services</button>
+      <button class="quick-option" onclick="sendQuickMessage('Pricing Info')">Pricing Info</button>
+      <button class="quick-option" onclick="sendQuickMessage('Book Event')">Book Event</button>
+      <button class="quick-option" onclick="sendQuickMessage('Contact Details')">Contact Details</button>
+    </div>
+    
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    
+    <div class="chatbot-input">
+      <input type="text" id="chatbot-input" placeholder="Type your message..." maxlength="200">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Theme Toggle
+  const toggleBtn = document.getElementById('theme-toggle');
+  const body = document.body;
+  let isDark = false;
+
+  function setTheme(mode) {
+    if (mode === 'light') {
+      body.classList.remove('dark');
+      toggleBtn.innerHTML = '🌙'; // Changed to innerHTML for icon
+      isDark = false;
+    } else {
+      body.classList.add('dark');
+      toggleBtn.innerHTML = '☀️'; // Changed to innerHTML for icon
+      isDark = true;
+    }
+    // Update header background immediately after theme change
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.98)' : 'rgba(255, 255, 255, 0.98)';
+    } else {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+    }
+  }
+
+  // Check for saved theme preference or set default to light
+  if (localStorage.getItem('theme') === 'dark') {
+    setTheme('dark');
+  } else {
+    setTheme('light');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const newTheme = isDark ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme); // Save theme preference
+  });
+
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Header background change on scroll
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.98)' : 'rgba(255, 255, 255, 0.98)';
+    } else {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+    }
+  });
+
+  // Save food selections
+  function saveSelections() {
+    const selections = [];
+    document.querySelectorAll('#food input[type="checkbox"]:checked').forEach(checkbox => {
+      selections.push(checkbox.parentElement.textContent.trim());
+    });
+    
+    if (selections.length > 0) {
+      alert(`Selected items:\n${selections.join('\n')}`);
+    } else {
+      alert('Please select at least one item from the menu.');
+    }
+  }
+
+  // Handle contact form submission
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message')
+    };
+    
+    alert(`Thank you ${data.name}! Your message has been received. We'll get back to you soon at ${data.email}.`);
+    event.target.reset();
+  }
+
+  // Animate elements on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.box, .category, .gallery img').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Chatbot functionality (remains the same)
+  const chatbotToggle = document.getElementById('chatbot-toggle');
+  const chatbotWindow = document.getElementById('chatbot-window');
+  const chatbotClose = document.getElementById('chatbot-close');
+  const chatbotMessages = document.getElementById('chatbot-messages');
+  const chatbotInput = document.getElementById('chatbot-input');
+  const typingIndicator = document.getElementById('typing-indicator');
+
+  const chatbotResponses = {
+    'our services': 'We offer a wide range of services:\n• Wedding Planning 💒\n• Birthday Parties 🎂\n• Corporate Events 🏢\n• Engagements 💍\n• Festivals 🎊\n• Technology Expos 💻\n• Naming Ceremonies 👶\n• Haldi Functions 🌟\n• Freshers Events 🎓\n\nWhich service interests you most?',
+    'pricing info': 'Our pricing packages:\n\n🌟 Basic Package: ₹9,999\n• Basic decoration\n• 50 guests capacity\n• 4-hour event\n\n⭐ Standard Package: ₹24,999\n• Premium decoration\n• 100 guests capacity\n• 6-hour event\n• Photography\n\n🏆 Premium Package: ₹49,999\n• Luxury decoration\n• 200 guests capacity\n• 8-hour event\n• Photography & Videography\n• DJ Services\n\n💎 Platinum Package: ₹99,000\n• Ultra-luxury setup\n• 500+ guests capacity\n• Full day event\n• Complete media coverage\n• Live entertainment',
+    'book event': 'Great! I\'d love to help you book an event. 📅\n\nTo get started, I need a few details:\n• What type of event?\n• Preferred date?\n• Number of guests?\n• Budget range?\n\nYou can also call us directly at:\n📞 8761xxxxxx\n📞 100-400-7264\n\nOr fill out our contact form on the website!',
+    'contact details': 'Here are our contact details:\n\n📞 Phone Numbers:\n• 8761xxxxxx\n• 100-400-7264\n• 7001xxxxxx\n\n📧 Email Addresses:\n• sanana22@gmail.com\n• harshu@gmail.com\n• sai2244@gmail.com\n\n🌐 Social Media:\n• Twitter\n• LinkedIn\n• Instagram\n• Facebook\n• Snapchat\n\nFeel free to reach out anytime!',
+    'wedding': 'Perfect choice for your special day! 💒✨\n\nOur wedding services include:\n• Venue decoration\n• Catering arrangements\n• Photography & videography\n• Music & entertainment\n• Bridal makeup\n• Guest coordination\n• Traditional ceremonies\n\nWould you like to know about our wedding packages or discuss specific requirements?',
+    'birthday': 'Birthday parties are our specialty! 🎂🎉\n\nWe handle:\n• Theme-based decorations\n• Cake arrangements\n• Entertainment (DJ, games)\n• Photography\n• Party favors\n• Catering\n\nFor kids or adults - we make it memorable! What age group and theme are you thinking?',
+    'corporate': 'Professional corporate events! 🏢💼\n\nOur services include:\n• Conference setup\n• Audio-visual equipment\n• Catering services\n• Professional photography\n• Guest registration\n• Transportation arrangements\n\nWhether it\'s a product launch, annual meeting, or team building - we\'ve got you covered!',
+    'food': 'Our food menu is extensive! 🍽️\n\nWe offer:\n• Vegetarian main courses\n• Non-vegetarian specialties\n• Snacks & starters\n• Traditional Indian breads\n• Biryani & rice dishes\n• Delicious desserts\n\nAll prepared by professional chefs with the highest quality ingredients. Any dietary preferences or special requests?',
+    'hello': 'Hello there! 👋 Welcome to Evento! How can I help you plan your perfect event today?',
+    'hi': 'Hi! 😊 Great to see you here! I\'m ready to help you with all your event planning needs.',
+    'help': 'I\'m here to help! 🤝 I can assist you with:\n• Information about our services\n• Pricing details\n• How to book an event\n• Our contact information\n\nJust ask away!',
+    'thank you': 'You\'re welcome! Is there anything else I can assist you with?',
+    'bye': 'Goodbye! Have a great day! 😊',
+    'default': 'I\'m sorry, I didn\'t understand that. Could you please rephrase or ask about our services, pricing, or contact details?'
+  };
+
+  chatbotToggle.addEventListener('click', () => {
+    chatbotWindow.classList.toggle('active');
+    if (chatbotWindow.classList.contains('active')) {
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom on open
+    }
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    chatbotWindow.classList.remove('active');
+  });
+
+  chatbotInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  function addMessage(text, sender) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', sender);
+    messageElement.innerHTML = `
+      <div class="message-bubble">${text}</div>
+      <div class="message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+    `;
+    chatbotMessages.appendChild(messageElement);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  function sendMessage() {
+    const messageText = chatbotInput.value.trim();
+    if (messageText === '') return;
+
+    addMessage(messageText, 'user');
+    chatbotInput.value = '';
+
+    showTypingIndicator();
+
+    setTimeout(() => {
+      hideTypingIndicator();
+      const lowerCaseMessage = messageText.toLowerCase();
+      let botResponse = chatbotResponses['default'];
+
+      for (const key in chatbotResponses) {
+        if (lowerCaseMessage.includes(key)) {
+          botResponse = chatbotResponses[key];
+          break;
+        }
+      }
+      addMessage(botResponse, 'bot');
+    }, 1000);
+  }
+
+  function sendQuickMessage(query) {
+    addMessage(query, 'user');
+    showTypingIndicator();
+
+    setTimeout(() => {
+      hideTypingIndicator();
+      const lowerCaseQuery = query.toLowerCase();
+      addMessage(chatbotResponses[lowerCaseQuery] || chatbotResponses['default'], 'bot');
+    }, 800);
+  }
+
+  function showTypingIndicator() {
+    typingIndicator.classList.add('active');
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  function hideTypingIndicator() {
+    typingIndicator.classList.remove('active');
+  }
+
+  // Vendor Sidebar Functionality
+  const vendorToggle = document.getElementById('vendor-toggle');
+  const vendorSidebar = document.getElementById('vendor-sidebar');
+  const vendorCloseBtn = document.getElementById('vendor-close-btn');
+
+  vendorToggle.addEventListener('click', () => {
+    vendorSidebar.classList.add('active');
+  });
+
+  vendorCloseBtn.addEventListener('click', () => {
+    vendorSidebar.classList.remove('active');
+  });
+
+  // Close sidebar if clicked outside (optional, but good for UX)
+  window.addEventListener('click', (event) => {
+    if (vendorSidebar.classList.contains('active') && !vendorSidebar.contains(event.target) && !vendorToggle.contains(event.target)) {
+      vendorSidebar.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --card-bg: #1a1a1a;
+            --accent: #ff6b6b;
+            --accent-hover: #ff5252;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #0a0a1f;
+            --text-color: #000000;
+            --card-bg: #ffffff;
+            --accent: #4facfe;
+            --accent-hover: #00f2fe;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent), var(--accent-hover));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 2rem;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--accent), var(--accent-hover));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .image-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid var(--border);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .image-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.3);
+            border-color: var(--accent);
+        }
+
+        .image-wrapper {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(79, 172, 254, 0.8));
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .zoom-icon {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .like-btn {
+            background: linear-gradient(45deg, var(--accent), var(--accent-hover));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .like-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .like-btn.liked {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            animation: likeAnimation 0.6s ease;
+        }
+
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .like-count {
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.3); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--accent-hover);
+            transform: rotate(90deg);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4757;
+            font-size: 1.5rem;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 100px 1rem 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="header">
+        <div class="logo">✨ Gallery</div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </div>
+
+    <div class="container">
+        <h1 class="title">Stunning Image Gallery</h1>
+        
+        <div class="gallery" id="gallery">
+            <!-- Images will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample images data
+        const images = [
+            { url: 'https://picsum.photos/400/300?random=1', title: 'Serene Landscape', description: 'A breathtaking view of nature' },
+            { url: 'https://picsum.photos/400/300?random=2', title: 'Urban Architecture', description: 'Modern city skyline' },
+            { url: 'https://picsum.photos/400/300?random=3', title: 'Ocean Waves', description: 'Peaceful ocean scenery' },
+            { url: 'https://picsum.photos/400/300?random=4', title: 'Mountain Peak', description: 'Majestic mountain view' },
+            { url: 'https://picsum.photos/400/300?random=5', title: 'Forest Path', description: 'Mysterious forest trail' },
+            { url: 'https://picsum.photos/400/300?random=6', title: 'Desert Sunset', description: 'Golden hour in the desert' },
+            { url: 'https://picsum.photos/400/300?random=7', title: 'City Lights', description: 'Nighttime urban glow' },
+            { url: 'https://picsum.photos/400/300?random=8', title: 'Flower Garden', description: 'Colorful blooming flowers' },
+            { url: 'https://picsum.photos/400/300?random=9', title: 'Snowy Mountains', description: 'Winter wonderland' },
+            { url: 'https://picsum.photos/400/300?random=10', title: 'Tropical Beach', description: 'Paradise island view' },
+            { url: 'https://picsum.photos/400/300?random=11', title: 'Autumn Forest', description: 'Fall colors in nature' },
+            { url: 'https://picsum.photos/400/300?random=12', title: 'Northern Lights', description: 'Aurora borealis magic' },
+            { url: 'https://picsum.photos/400/300?random=13', title: 'Canyon View', description: 'Grand canyon landscape' },
+            { url: 'https://picsum.photos/400/300?random=14', title: 'Waterfall', description: 'Cascading water beauty' },
+            { url: 'https://picsum.photos/400/300?random=15', title: 'Starry Night', description: 'Night sky wonder' },
+            { url: 'https://picsum.photos/400/300?random=16', title: 'Lake Reflection', description: 'Mirror-like water surface' },
+            { url: 'https://picsum.photos/400/300?random=17', title: 'Cherry Blossoms', description: 'Spring flower bloom' },
+            { url: 'https://picsum.photos/400/300?random=18', title: 'Rolling Hills', description: 'Green countryside' },
+            { url: 'https://picsum.photos/400/300?random=19', title: 'Lighthouse', description: 'Coastal beacon of hope' },
+            { url: 'https://picsum.photos/400/300?random=20', title: 'Rainbow Valley', description: 'After the storm beauty' }
+        ];
+
+        let likes = {};
+
+        function generateGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            images.forEach((image, index) => {
+                if (!likes[index]) likes[index] = Math.floor(Math.random() * 50) + 1;
+
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${image.url}" alt="${image.title}" onclick="openModal('${image.url}')">
+                        <div class="image-overlay">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${image.title}</div>
+                        <div class="card-description">${image.description}</div>
+                        <button class="like-btn" onclick="likeImage(${index}, this)">
+                            <span>❤️</span>
+                            <span class="like-count">${likes[index]}</span>
+                        </button>
+                    </div>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        function likeImage(index, button) {
+            likes[index]++;
+            button.classList.add('liked');
+            button.querySelector('.like-count').textContent = likes[index];
+            
+            // Create floating heart animation
+            createFloatingHeart(button);
+            
+            setTimeout(() => {
+                button.classList.remove('liked');
+            }, 600);
+        }
+
+        function createFloatingHeart(button) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 20 + 'px';
+            heart.style.top = '0px';
+            
+            const container = document.createElement('div');
+            container.className = 'floating-hearts';
+            container.appendChild(heart);
+            button.appendChild(container);
+            
+            setTimeout(() => {
+                container.remove();
+            }, 2000);
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '☀️ Light Mode';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '🌙 Dark Mode';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize gallery
+        generateGallery();
+
+        // Add some entrance animations
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.image-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evento - Event Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --accent-color: #45b7d1;
+      --dark-color: #2c3e50;
+      --light-color: #ecf0f1;
+      --text-dark: #2c3e50;
+      --text-light: #ffffff;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-decoration: none;
+      text-transform: lowercase;
+    }
+
+    .logo span {
+      color: var(--secondary-color);
+    }
+
+    .navbar {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .navbar a:hover {
+      color: var(--primary-color);
+    }
+
+    .navbar a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-2);
+      transition: width 0.3s ease;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    #theme-toggle {
+      background: var(--gradient-1);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Home Section */
+    .home {
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                  url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text-light);
+      position: relative;
+    }
+
+    .home::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,107,107,0.3), rgba(78,205,196,0.3));
+    }
+
+    .home .content {
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+
+    .home h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .home p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 15px 40px;
+      background: var(--gradient-2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(245,87,108,0.3);
+      animation: fadeInUp 1s ease 0.6s both;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(245,87,108,0.4);
+    }
+
+    /* Section Styling */
+    section {
+      padding: 100px 5%;
+    }
+
+    .heading {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 3rem;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Services */
+    .service {
+      background: var(--light-color);
+    }
+
+    .box-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .box {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-3);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+
+    .box:hover::before {
+      left: 0;
+    }
+
+    .box:hover {
+      transform: translateY(-10px);
+      color: white;
+    }
+
+    /* Gallery */
+    .gallery .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    /* Food Section */
+    .food {
+      background: var(--light-color);
+    }
+
+    .category {
+      margin-bottom: 3rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .category h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .grid label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .grid label:hover {
+      background: rgba(255,107,107,0.1);
+    }
+
+    .grid input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary-color);
+    }
+
+    /* Pricing */
+    .price .box-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .price .box {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price .box:nth-child(2) {
+      transform: scale(1.05);
+      background: var(--gradient-2);
+      color: white;
+    }
+
+    .price .box h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .price .box p {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .price .box:nth-child(2) p {
+      color: white;
+    }
+
+    /* Contact */
+    .contact {
+      background: var(--gradient-1);
+      color: white;
+    }
+
+    .contact .heading {
+      color: white;
+      -webkit-text-fill-color: white;
+    }
+
+    .contact form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact input,
+    .contact textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact input::placeholder,
+    .contact textarea::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .contact textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    /* About */
+    .about {
+      background: white;
+      text-align: center;
+    }
+
+    .about p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    /* Review */
+    .review {
+      background: var(--light-color);
+    }
+
+    .review ul {
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .review li {
+      background: white;
+      padding: 2rem;
+      margin-bottom: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      font-style: italic;
+      position: relative;
+    }
+
+    .review li::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--primary-color);
+      position: absolute;
+      top: -10px;
+      left: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark-color);
+      color: white;
+      padding: 3rem 5%;
+      text-align: center;
+    }
+
+    .footer table {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer th {
+      padding: 1rem;
+      font-weight: 400;
+    }
+
+    .footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dark Mode */
+    .dark {
+      --text-dark: #ecf0f1;
+      --light-color: #34495e;
+      background: #000a1f;
+      color: #ecf0f1;
+    }
+
+    .dark .header {
+      background: rgba(44, 62, 80, 0.95);
+    }
+
+    .dark .navbar a {
+      color: #ecf0f1;
+    }
+
+    .dark .box,
+    .dark .category {
+      background: #34495e;
+      color: #ecf0f1;
+    }
+
+    /* Chatbot Styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1001;
+    }
+
+    .chatbot-toggle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--gradient-2);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(245,87,108,0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chatbot-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 40px rgba(245,87,108,0.4);
+    }
+
+    .chatbot-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+
+    .chatbot-window.active {
+      display: flex;
+    }
+
+    .chatbot-header {
+      background: var(--gradient-1);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .chatbot-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .chatbot-header .status {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .chatbot-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .chatbot-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.bot {
+      align-items: flex-start;
+    }
+
+    .message.user {
+      align-items: flex-end;
+    }
+
+    .message-bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .message.bot .message-bubble {
+      background: white;
+      color: var(--text-dark);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .message.user .message-bubble {
+      background: var(--gradient-2);
+      color: white;
+    }
+
+    .message-time {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-top: 5px;
+      padding: 0 16px;
+    }
+
+    .quick-options {
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: white;
+      border-top: 1px solid #eee;
+    }
+
+    .quick-option {
+      background: var(--light-color);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-option:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .chatbot-input {
+      display: flex;
+      padding: 15px 20px;
+      background: white;
+      border-top: 1px solid #eee;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 15px;
+      border-radius: 25px;
+      background: #f5f5f5;
+      font-size: 0.9rem;
+    }
+
+    .chatbot-input button {
+      background: var(--gradient-2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .chatbot-input button:hover {
+      transform: scale(1.1);
+    }
+
+    .typing-indicator {
+      display: none;
+      padding: 10px 16px;
+      background: white;
+      border-radius: 18px;
+      margin-bottom: 15px;
+      max-width: 80%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .typing-indicator.active {
+      display: block;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      30% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dark mode for chatbot */
+    .dark .chatbot-window {
+      background: var(--dark-color);
+    }
+
+    .dark .chatbot-messages {
+      background: #34495e;
+    }
+
+    .dark .message.bot .message-bubble {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .dark .chatbot-input,
+    .dark .quick-options {
+      background: var(--dark-color);
+      border-color: #34495e;
+    }
+
+    .dark .chatbot-input input {
+      background: #34495e;
+      color: white;
+    }
+
+    .dark .typing-indicator {
+      background: #2c3e50;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        display: none;
+      }
+      
+      .home h1 {
+        font-size: 2.5rem;
+      }
+      
+      .home p {
+        font-size: 1.2rem;
+      }
+      
+      .heading {
+        font-size: 2rem;
+      }
+      
+      section {
+        padding: 50px 5%;
+      }
+
+      .chatbot-window {
+        width: 320px;
+        height: 450px;
+      }
+
+      .chatbot-container {
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <a href="#" class="logo"><span>e</span>vento</a>
+  <nav class="navbar">
+    <a href="#home">home</a>
+    <a href="#service">service</a>
+    <a href="#about">about</a>
+    <a href="#gallery">gallery</a>
+    <a href="catering.html">Food</a>
+    <a href="#price">price</a>
+    <a href="#review">review</a>
+    <a href="#contact">contact</a>
+  </nav>
+  <button id="theme-toggle" aria-label="Toggle Theme">🌙</button>
+</header>
+
+<!-- Home -->
+<section id="home" class="home">
+  <div class="content">
+    <h1>Welcome to Evento</h1>
+    <p>Your dream event, our responsibility</p>
+    <a href="#contact" class="btn">Get Started</a>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="service" class="service">
+  <h2 class="heading">Our Services</h2>
+  <div class="box-container">
+    <div class="box">Wedding Planning</div>
+    <div class="box">Birthday Parties</div>
+    <div class="box">Corporate Events</div>
+    <div class="box">Engagements</div>
+    <div class="box">Festivals</div>
+    <div class="box">Technology Expos</div>
+    <div class="box">Naming Ceremony</div>
+    <div class="box">Haldi Function</div>
+    <div class="box">Freshers</div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery" class="gallery">
+  <h2 class="heading">Gallery</h2>
+  <div class="container">
+    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Wedding Setup" />
+    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Birthday Party Setup" />
+    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Corporate Event Hall" />
+    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Engagement Ceremony" />
+    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Festival Decoration" />
+    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Event Setup" />
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="price" class="price">
+  <h2 class="heading">Pricing</h2>
+  <div class="box-container">
+    <div class="box">
+      <h3>Basic Package</h3>
+      <p>₹9,999</p>
+    </div>
+    <div class="box">
+      <h3>Standard Package</h3>
+      <p>₹24,999</p>
+    </div>
+    <div class="box">
+      <h3>Premium Package</h3>
+      <p>₹49,999</p>
+    </div>
+    <div class="box">
+      <h3>Platinum Package</h3>
+      <p>₹99,000</p>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section id="review" class="review">
+  <h2 class="heading">Client Reviews</h2>
+  <ul>
+    <li>Evento made my wedding day magical! The attention to detail and professional service exceeded all expectations. Highly recommend!</li>
+    <li>Professional team and amazing service. They handled everything seamlessly and made our corporate event a huge success. 5 stars!</li>
+    <li>From planning to execution, everything was perfect. The team at Evento truly understands how to make dreams come true!</li>
+  </ul>
+</section>
+
+<!-- About -->
+<section id="about" class="about">
+  <h2 class="heading">About Us</h2>
+  <p>Evento is a premier event management company committed to turning your special occasions into unforgettable memories. With years of experience and a passion for creativity, we design and execute flawless events tailored to your vision. From weddings and birthdays to corporate events and festivals, we handle everything with professionalism and care. Our dedicated team ensures every detail is planned to perfection, leaving you stress-free and smiling. We believe in combining tradition with innovation to bring your dreams to life. With trusted vendors, stunning décor, and seamless coordination, Evento delivers excellence every time. Customer satisfaction is at the heart of everything we do. Choose Evento — where your event becomes a story worth telling.</p>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact">
+  <h2 class="heading">Contact Us</h2>
+  <form onsubmit="handleSubmit(event)">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit" class="btn">Send Message</button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <table>
+    <tr>
+      <th style="color: var(--primary-color);">Quick Links</th>
+      <th style="color: var(--primary-color);">Contact Info</th>
+      <th style="color: var(--primary-color);">Follow Us</th>
+    </tr>
+    <tr>
+      <th><a href="#home">Home</a></th>
+      <th>📞 8761xxxxxx</th>
+      <th>🐦 Twitter</th>
+    </tr>
+    <tr>
+      <th><a href="#service">Service</a></th>
+      <th>📞 100-400-7264</th>
+      <th>💼 LinkedIn</th>
+    </tr>
+    <tr>
+      <th><a href="#about">About</a></th>
+      <th>📞 7001xxxxxx</th>
+      <th>👻 Snapchat</th>
+    </tr>
+    <tr>
+      <th><a href="#gallery">Gallery</a></th>
+      <th>📧 sanana22@gmail.com</th>
+      <th>📷 Instagram</th>
+    </tr>
+    <tr>
+      <th><a href="#price">Pricing</a></th>
+      <th>📧 harshu@gmail.com</th>
+      <th>📘 Facebook</th>
+    </tr>
+    <tr>
+      <th><a href="#contact">Contact</a></th>
+      <th>📧 sai2244@gmail.com</th>
+      <th></th>
+    </tr>
+  </table>
+</footer>
+
+<!-- Chatbot -->
+<div class="chatbot-container">
+  <button class="chatbot-toggle" id="chatbot-toggle">💬</button>
+  
+  <div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+      <h3>Evento Assistant</h3>
+      <div class="status">🟢 Online - Ready to help!</div>
+      <button class="chatbot-close" id="chatbot-close">×</button>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="message bot">
+        <div class="message-bubble">
+          Hello! 👋 I'm your Evento assistant. I'm here to help you plan the perfect event! How can I assist you today?
+        </div>
+        <div class="message-time">Just now</div>
+      </div>
+    </div>
+    
+    <div class="quick-options" id="quick-options">
+      <button class="quick-option" onclick="sendQuickMessage('Our Services')">Our Services</button>
+      <button class="quick-option" onclick="sendQuickMessage('Pricing Info')">Pricing Info</button>
+      <button class="quick-option" onclick="sendQuickMessage('Book Event')">Book Event</button>
+      <button class="quick-option" onclick="sendQuickMessage('Contact Details')">Contact Details</button>
+    </div>
+    
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    
+    <div class="chatbot-input">
+      <input type="text" id="chatbot-input" placeholder="Type your message..." maxlength="200">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Theme Toggle
+  const toggleBtn = document.getElementById('theme-toggle');
+  const body = document.body;
+  let isDark = false;
+
+  function setTheme(mode) {
+    if (mode === 'light') {
+      body.classList.remove('dark');
+      toggleBtn.textContent = '🌙';
+      isDark = false;
+    } else {
+      body.classList.add('dark');
+      toggleBtn.textContent = '☀️';
+      isDark = true;
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    setTheme(isDark ? 'light' : 'dark');
+  });
+
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Header background change on scroll
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.98)' : 'rgba(255, 255, 255, 0.98)';
+    } else {
+      header.style.background = isDark ? 'rgba(44, 62, 80, 0.95)' : 'rgba(255, 255, 255, 0.95)';
+    }
+  });
+
+  // Save food selections
+  function saveSelections() {
+    const selections = [];
+    document.querySelectorAll('#food input[type="checkbox"]:checked').forEach(checkbox => {
+      selections.push(checkbox.parentElement.textContent.trim());
+    });
+    
+    if (selections.length > 0) {
+      alert(`Selected items:\n${selections.join('\n')}`);
+    } else {
+      alert('Please select at least one item from the menu.');
+    }
+  }
+
+  // Handle contact form submission
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message')
+    };
+    
+    alert(`Thank you ${data.name}! Your message has been received. We'll get back to you soon at ${data.email}.`);
+    event.target.reset();
+  }
+
+  // Animate elements on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.box, .category, .gallery img').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Chatbot functionality
+  const chatbotToggle = document.getElementById('chatbot-toggle');
+  const chatbotWindow = document.getElementById('chatbot-window');
+  const chatbotClose = document.getElementById('chatbot-close');
+  const chatbotMessages = document.getElementById('chatbot-messages');
+  const chatbotInput = document.getElementById('chatbot-input');
+  const typingIndicator = document.getElementById('typing-indicator');
+
+  // Chatbot responses database
+  const chatbotResponses = {
+    'our services': 'We offer a wide range of services:\n• Wedding Planning 💒\n• Birthday Parties 🎂\n• Corporate Events 🏢\n• Engagements 💍\n• Festivals 🎊\n• Technology Expos 💻\n• Naming Ceremonies 👶\n• Haldi Functions 🌟\n• Freshers Events 🎓\n\nWhich service interests you most?',
+    
+    'pricing info': 'Our pricing packages:\n\n🌟 Basic Package: ₹9,999\n• Basic decoration\n• 50 guests capacity\n• 4-hour event\n\n⭐ Standard Package: ₹24,999\n• Premium decoration\n• 100 guests capacity\n• 6-hour event\n• Photography\n\n🏆 Premium Package: ₹49,999\n• Luxury decoration\n• 200 guests capacity\n• 8-hour event\n• Photography & Videography\n• DJ Services\n\n💎 Platinum Package: ₹99,000\n• Ultra-luxury setup\n• 500+ guests capacity\n• Full day event\n• Complete media coverage\n• Live entertainment',
+    
+    'book event': 'Great! I\'d love to help you book an event. 📅\n\nTo get started, I need a few details:\n• What type of event?\n• Preferred date?\n• Number of guests?\n• Budget range?\n\nYou can also call us directly at:\n📞 8761xxxxxx\n📞 100-400-7264\n\nOr fill out our contact form on the website!',
+    
+    'contact details': 'Here are our contact details:\n\n📞 Phone Numbers:\n• 8761xxxxxx\n• 100-400-7264\n• 7001xxxxxx\n\n📧 Email Addresses:\n• sanana22@gmail.com\n• harshu@gmail.com\n• sai2244@gmail.com\n\n🌐 Social Media:\n• Twitter\n• LinkedIn\n• Instagram\n• Facebook\n• Snapchat\n\nFeel free to reach out anytime!',
+    
+    'wedding': 'Perfect choice for your special day! 💒✨\n\nOur wedding services include:\n• Venue decoration\n• Catering arrangements\n• Photography & videography\n• Music & entertainment\n• Bridal makeup\n• Guest coordination\n• Traditional ceremonies\n\nWould you like to know about our wedding packages or discuss specific requirements?',
+    
+    'birthday': 'Birthday parties are our specialty! 🎂🎉\n\nWe handle:\n• Theme-based decorations\n• Cake arrangements\n• Entertainment (DJ, games)\n• Photography\n• Party favors\n• Catering\n\nFor kids or adults - we make it memorable! What age group and theme are you thinking?',
+    
+    'corporate': 'Professional corporate events! 🏢💼\n\nOur services include:\n• Conference setup\n• Audio-visual equipment\n• Catering services\n• Professional photography\n• Guest registration\n• Transportation arrangements\n\nWhether it\'s a product launch, annual meeting, or team building - we\'ve got you covered!',
+    
+    'food': 'Our food menu is extensive! 🍽️\n\nWe offer:\n• Vegetarian main courses\n• Non-vegetarian specialties\n• Snacks & starters\n• Traditional Indian breads\n• Biryani & rice dishes\n• Delicious desserts\n\nAll prepared by professional chefs with the highest quality ingredients. Any dietary preferences or special requests?',
+    
+    'hello': 'Hello there! 👋 Welcome to Evento! How can I help you plan your perfect event today?',
+    'hi': 'Hi! 😊 Great to see you here! I\'m ready to help you with all your event planning needs.',
+    'help': 'I\'m here to help! 🤝 I can assist you with:\n• Information about our services\n• Pricing details\n• Booking process\n• Contact information\n• Menu options\n• Event planning tips\n\nWhat would you like to know?',
+    'thank you': 'You\'re welcome! 😊 If you need any help, feel free to ask again!',
+    'thanks': 'Glad I could help! 💫 Let me know if there\'s anything else.',
+    'explain': 'Sure! Please specify what you want me to explain: services, pricing, packages, or booking process?',
+    'booking': 'Booking is simple! Just tell us your event type, date, and guest count. Or use our contact form to get started!',
+    'decor': 'We offer themed decor like Royal, Rustic, Bollywood, and more. 🎨 Want to see samples?',
+    'menu': 'Our food menu includes North Indian, South Indian, Chinese, and continental options. Customization available! 🍽️',
+    'photography': 'We provide candid, traditional, drone, and instant photo booth photography. 📸 Want to see packages?',
+    'venue': 'We partner with top venues in major cities. Let us know your location and guest count for suggestions. 🏰',
+    'budget': 'Tell us your budget and we’ll suggest the best package 🎁 without compromising on quality!',
+  
+    default: 'I\'d be happy to help you with that! 😊 For specific details, you can:\n\n• Use the quick options below\n• Call us at 8761xxxxxx\n• Fill out our contact form\n• Browse our services section\n\nWhat aspect of event planning interests you most?'
+  };
+
+  // Toggle chatbot
+  chatbotToggle.addEventListener('click', () => {
+    chatbotWindow.classList.toggle('active');
+    if (chatbotWindow.classList.contains('active')) {
+      chatbotInput.focus();
+    }
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    chatbotWindow.classList.remove('active');
+  });
+
+  // Send message function
+  function sendMessage() {
+    const message = chatbotInput.value.trim();
+    if (message) {
+      addMessage(message, 'user');
+      chatbotInput.value = '';
+      
+      // Show typing indicator
+      showTyping();
+      
+      // Generate bot response after delay
+      setTimeout(() => {
+        hideTyping();
+        const response = generateResponse(message);
+        addMessage(response, 'bot');
+      }, 1000 + Math.random() * 1000);
+    }
+  }
+
+  // Quick message function
+  function sendQuickMessage(message) {
+    addMessage(message, 'user');
+    showTyping();
+    
+    setTimeout(() => {
+      hideTyping();
+      const response = generateResponse(message);
+      addMessage(response, 'bot');
+    }, 800);
+  }
+
+  // Add message to chat
+  function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    messageDiv.innerHTML = `
+      <div class="message-bubble">${text.replace(/\n/g, '<br>')}</div>
+      <div class="message-time">${time}</div>
+    `;
+    
+    chatbotMessages.appendChild(messageDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  // Generate bot response
+  function generateResponse(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Check for specific keywords
+    for (const keyword in chatbotResponses) {
+      if (lowerMessage.includes(keyword)) {
+        return chatbotResponses[keyword];
+      }
+    }
+    
+    return chatbotResponses.default;
+  }
+
+  // Show typing indicator
+  function showTyping() {
+    typingIndicator.classList.add('active');
+    chatbotMessages.appendChild(typingIndicator);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  // Hide typing indicator
+  function hideTyping() {
+    typingIndicator.classList.remove('active');
+    if (typingIndicator.parentNode) {
+      typingIndicator.parentNode.removeChild(typingIndicator);
+    }
+  }
+
+  // Enter key to send message
+  chatbotInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Auto-greet after 3 seconds if chatbot is opened
+  let hasGreeted = false;
+  setInterval(() => {
+    if (chatbotWindow.classList.contains('active') && !hasGreeted) {
+      hasGreeted = true;
+      setTimeout(() => {
+        addMessage('Need help finding the perfect package for your event? Just ask! 🎯', 'bot');
+      }, 3000);
+    }
+  }, 1000);
+</script>
+
+</body>
+</html>

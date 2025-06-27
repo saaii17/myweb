@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f1f3f6;
+            --text-color: #212121;
+            --card-bg: #ffffff;
+            --accent: #ff6161;
+            --accent-hover: #ff4444;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border: rgba(0, 0, 0, 0.1);
+            --price-color: #388e3c;
+            --discount-color: #ff5722;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0a0a1f;
+            --text-color: #ffffff;
+            --card-bg: #1a1a1a;
+            --accent: #ff6b6b;
+            --accent-hover: #ff5252;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --price-color: #4caf50;
+            --discount-color: #ff7043;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+            padding: 80px 20px 20px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .image-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .image-wrapper {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .like-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .like-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .like-btn.liked {
+            background: var(--accent);
+            color: white;
+            animation: likeAnimation 0.6s ease;
+        }
+
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .image-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .image-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .image-description {
+            color: #aaa;
+        }
+
+        .price-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--price-color);
+        }
+
+        .original-price {
+            font-size: 1rem;
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        .discount {
+            font-size: 0.85rem;
+            color: var(--discount-color);
+            font-weight: 600;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .stars {
+            color: #ffa726;
+        }
+
+        .contact-section {
+            max-width: 1400px;
+            margin: 4rem auto 2rem;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .contact-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--accent), #ff8a80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-description {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--accent), #ff8a80);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 97, 97, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 97, 97, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .contact-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .contact-btn:hover::before {
+            left: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.3); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-image {
+            width: auto;
+            height: auto;
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(1);
+            transform-origin: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--accent-hover);
+            transform: rotate(90deg);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4757;
+            font-size: 1.5rem;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            body {
+                padding: 70px 15px 15px;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+
+            .modal-image {
+                transform: scale(2);
+            }
+
+            .contact-section {
+                margin: 3rem auto 1rem;
+                padding: 2rem 1rem;
+            }
+
+            .contact-title {
+                font-size: 2rem;
+            }
+
+            .contact-description {
+                font-size: 1rem;
+            }
+
+            .contact-btn {
+                padding: 0.875rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="header">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Images will be generated by JavaScript -->
+    </div>
+
+    <!-- Contact/Customization Section -->
+    <div class="contact-section">
+        <h2 class="contact-title">Need Customization?</h2>
+        <p class="contact-description">
+            Want to customize any package or have specific requirements? <br>
+            Get in touch with us for personalized solutions and pricing!
+        </p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScsYfTFtIxiHfeygwxD9qnYsXu3NAzQW4s7EHtw3Xqbg0Qvfg/viewform?usp=dialog" 
+           target="_blank" 
+           class="contact-btn">
+            📝 Contact Us for Customization
+        </a>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // TO CHANGE IMAGE DESCRIPTIONS, TITLES, AND PRICES:
+        // Edit the objects below. Each object represents one image card.
+        // - url: Your original image filename (DON'T CHANGE)
+        // - title: Change this to your desired product name
+        // - description: Change this to your desired product description
+        // - currentPrice: Current selling price
+        // - originalPrice: Original price (should be higher than current)
+        // - rating: Product rating out of 5
+        // ========================================
+        
+        const images = [
+            {
+                url: '/static/1x.jpg',                    // ← DON'T CHANGE: Your original image
+                title: 'Platinum Package',      // ← CHANGE: Product title
+                description: 'High-quality Floral Welcome Backdrop', // ← CHANGE: Product description
+                currentPrice: 29999,              // ← CHANGE: Current price
+                originalPrice: 49999,             // ← CHANGE: Original price
+                rating: 4.5                      // ← CHANGE: Rating (0-5)
+            },
+            {
+                url: '/static/2x.jpg',
+                title: 'Naming Decore',
+                description: 'Traditional Touch, Modern Look',
+                currentPrice: 28999,
+                originalPrice: 31999,
+                rating: 4.3
+            },
+            {
+                url: '/static/3x.jpg',
+                title: 'Platinum Package',
+                description: 'Floral Welcome Backdrop',
+                currentPrice: 19999,
+                originalPrice: 29999,
+                rating: 4.6
+            },
+            {
+                url: '/static/4x.jpg',
+                title: 'Platinum Package',
+                description: 'Erfectly Adorned Moments.',
+                currentPrice: 33499,
+                originalPrice: 44499,
+                rating: 4.4
+            },
+            {
+                url: '/static/5x.jpg',
+                title: 'Gold Package',
+                description: 'Interactive Elements',
+                currentPrice: 24999,
+                originalPrice: 29999,
+                rating: 4.7
+            },
+            {
+                url: '/static/6x.jpg',
+                title: 'Gold Package',
+                description: 'Traditional Touch, Modern Look',
+                currentPrice: 88899,
+                originalPrice: 99999,
+                rating: 4.2
+            },
+            {
+                url: '/static/7x.jpg',
+                title: 'Naming Decore',
+                description: 'High-quality Floral Welcome Backdrop',
+                currentPrice: 35999,
+                originalPrice: 59999,
+                rating: 4.5
+            },
+            {
+                url: '/static/8x.jpg',
+                title: 'Silver Package',
+                description: 'High-quality Floral Welcome Backdrop',
+                currentPrice: 18999,
+                originalPrice: 22999,
+                rating: 4.4
+            },
+            {
+                url: '/static/9x.jpg',
+                title: 'Naming Decore',
+                description: 'Balloon Magic for Your Baby',
+                currentPrice: 21499,
+                originalPrice: 33499,
+                rating: 4.3
+            },
+            {
+                url: '/static/10x.jpg',
+                title: 'Silver Package',
+                description: 'Balloon Magic for Your Baby',
+                currentPrice: 11299,
+                originalPrice: 18999,
+                rating: 4.6
+            },
+            {
+                url: '/static/11x.jpg',
+                title: 'Monitor',
+                description: 'Royal Entry Setup',
+                currentPrice: 15999,
+                originalPrice: 19999,
+                rating: 4.5
+            },
+            {
+                url: '/static/12x.jpg',
+                title: 'Standard Package',
+                description: 'Simple Yet Stunning Vibes',
+                currentPrice: 49999,
+                originalPrice: 69999,
+                rating: 4.4
+            },
+            {
+                url: '/static/13x.jpg',
+                title: 'Silver Package',
+                description: 'Royal Entry Setup',
+                currentPrice: 23499,
+                originalPrice: 34999,
+                rating: 4.3
+            },
+            {
+                url: '/static/14x.jpg',
+                title: 'Standard Package',
+                description: 'Simple Yet Stunning Vibes',
+                currentPrice: 34999,
+                originalPrice: 44999,
+                rating: 4.6
+            },
+            {
+                url: '/static/15x.jpg',
+                title: 'Naming Decore',
+                description: 'Blessings in Every Detail',
+                currentPrice: 45999,
+                originalPrice: 54999,
+                rating: 4.7
+            },
+            {
+                url: '/static/16x.jpg',
+                title: 'Basic Package',
+                description: 'Blessings in Every Detail',
+                currentPrice: 12999,
+                originalPrice: 16999,
+                rating: 4.5
+            },
+            {
+                url: '/static/17x.jpg',
+                title: 'Naming Decore',
+                description: 'Traditional Touch, Modern Look',
+                currentPrice: 11999,
+                originalPrice: 15999,
+                rating: 4.4
+            },
+            {
+                url: '/static/18x.jpg',
+                title: 'Basic Package',
+                description: 'Simple Yet Stunning Vibes',
+                currentPrice: 7799,
+                originalPrice: 8199,
+                rating: 4.2
+            },
+            {
+                url: '/static/19x.jpeg',
+                title: 'Basic Package',
+                description: 'Traditional Touch, Modern Look',
+                currentPrice: 5999,
+                originalPrice: 73999,
+                rating: 4.3
+            },
+            {
+                url: '/static/20x.jpeg',
+                title: 'Basic Package',
+                description: 'Simple Yet Stunning Vibes',
+                currentPrice: 6999,
+                originalPrice: 8999,
+                rating: 4.6
+            }
+        ];
+
+        let likes = {};
+
+        function calculateDiscount(original, current) {
+            return Math.round(((original - current) / original) * 100);
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '★';
+            }
+            if (hasHalfStar) {
+                stars += '☆';
+            }
+            
+            return stars;
+        }
+
+        function generateGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            images.forEach((item, index) => {
+                if (!likes[index]) likes[index] = false;
+                
+                const discount = calculateDiscount(item.originalPrice, item.currentPrice);
+
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${item.url}" alt="${item.title}" onclick="openModal('${item.url}')">
+                        <button class="like-btn ${likes[index] ? 'liked' : ''}" onclick="likeImage(${index}, this)">
+                            ${likes[index] ? '❤️' : '🤍'}
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="image-title">${item.title}</div>
+                        <div class="image-description">${item.description}</div>
+                        <div class="price-section">
+                            <span class="current-price">₹${item.currentPrice.toLocaleString()}</span>
+                            <span class="original-price">₹${item.originalPrice.toLocaleString()}</span>
+                            <span class="discount">${discount}% off</span>
+                        </div>
+                        <div class="rating">
+                            <span class="stars">${generateStars(item.rating)}</span>
+                            <span>${item.rating}</span>
+                        </div>
+                    </div>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        function likeImage(index, button) {
+            likes[index] = !likes[index];
+            
+            if (likes[index]) {
+                button.classList.add('liked');
+                button.innerHTML = '❤️';
+                createFloatingHeart(button);
+            } else {
+                button.classList.remove('liked');
+                button.innerHTML = '🤍';
+            }
+        }
+
+        function createFloatingHeart(button) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 20 + 'px';
+            heart.style.top = '0px';
+            
+            const container = document.createElement('div');
+            container.className = 'floating-hearts';
+            container.appendChild(heart);
+            button.appendChild(container);
+            
+            setTimeout(() => {
+                container.remove();
+            }, 2000);
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '🌙 Dark Mode';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️ Light Mode';
+            }
+        }
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // If no history, you can redirect to a default page
+                window.location.href = '/';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize gallery
+        generateGallery();
+
+        // Add entrance animations
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.image-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>

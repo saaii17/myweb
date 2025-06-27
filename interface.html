@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Ready</title>
+  
+  
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+    }
+      
+
+
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, 
+        rgba(67, 56, 202, 0.9) 0%,
+        rgba(139, 92, 246, 0.8) 25%,
+        rgba(236, 72, 153, 0.7) 50%,
+        rgba(251, 146, 60, 0.8) 75%,
+        rgba(34, 197, 94, 0.9) 100%
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* HD Background Pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%);
+      background-size: 200px 200px, 300px 300px, 60px 60px, 60px 60px;
+      animation: backgroundMove 20s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes backgroundMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-60px, -60px); }
+    }
+
+    /* Floating particles */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.3), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: sparkle 8s linear infinite;
+      z-index: 2;
+    }
+
+    @keyframes sparkle {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-100px); }
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(1px);
+      z-index: 3;
+    }
+
+    .content {
+      position: relative;
+      z-index: 4;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      max-width: 600px;
+      animation: fadeInUp 1.2s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 3rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      animation: logoFloat 3s ease-in-out infinite;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .logo::before {
+      content: 'E';
+      color: #000a1f;
+      font-size: 3.5rem;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.05); }
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      padding: 18px 48px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      min-width: 200px;
+    }
+
+    .start-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .start-btn:hover::before {
+      left: 100%;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 
+        0 20px 40px rgba(102, 126, 234, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .start-btn:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .content {
+        padding: 1rem;
+        max-width: 90%;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 2rem;
+        font-size: 2.5rem;
+      }
+
+      .logo::before {
+        font-size: 3rem;
+      }
+
+      .start-btn {
+        padding: 16px 36px;
+        font-size: 1.1rem;
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+      }
+
+      .logo::before {
+        font-size: 2.5rem;
+      }
+
+      .start-btn {
+        padding: 14px 28px;
+        font-size: 1rem;
+        min-width: 160px;
+      }
+    }
+
+    /* High-quality blur effect for modern browsers */
+    @supports (backdrop-filter: blur(10px)) {
+      .content {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 3rem 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" style="position: absolute; top: 0; width: 100%; padding: 1rem 2rem; z-index: 10; display: flex; justify-content: space-between; color: white;">
+    <!-- <div class="logo" style="font-size: 1.5rem;">Evento</div> -->
+      <nav class="navbar" style="display: flex; gap: 1.5rem;">
+        <a href="interface.html" style="color: white; text-decoration: none;">Home</a>
+        <!-- <a href="catering.html" style="color: white; text-decoration: none;">Food</a>
+        <a href="vendor.html" style="color: white; text-decoration: none;">Vendors</a> -->
+        <a href="login page.html" style="color: white; text-decoration: none;">Login</a>
+      </nav>
+    </header>
+  <div class="hero">
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="logo"></div>
+      <a href="login page.html" class="start-btn">Get Started</a>
+    </div>
+  </div>
+</body>
+</html>

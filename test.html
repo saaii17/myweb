@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marriage Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 3rem;
+      margin: 2rem 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      opacity: 0;
+      animation: fadeInDown 1s ease-out forwards;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto 4rem;
+      padding: 2rem;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.4s ease;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 0.8s ease-out forwards;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .image-container:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .image-container:hover img {
+      filter: brightness(1.1);
+    }
+
+    .like-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    .like-button:hover {
+      background: rgba(255,255,255,1);
+      transform: scale(1.1);
+    }
+
+    .like-button.liked {
+      background: #ff4757;
+      color: white;
+      animation: pulse 0.3s ease;
+    }
+
+    .like-count {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+
+    .modal-like {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-like:hover {
+      background: rgba(255,255,255,1);
+      transform: scale(1.1);
+    }
+
+    .modal-like.liked {
+      background: #ff4757;
+      color: white;
+    }
+
+    /* Navigation arrows */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      padding: 15px 20px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-arrow:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .prev-arrow {
+      left: 30px;
+    }
+
+    .next-arrow {
+      right: 30px;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin: 1rem 0;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .image-container img {
+        height: 200px;
+      }
+
+      .like-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        top: 10px;
+        right: 10px;
+      }
+
+      .nav-arrow {
+        font-size: 1.5rem;
+        padding: 10px 15px;
+      }
+
+      .close {
+        font-size: 30px;
+        width: 50px;
+        height: 50px;
+        top: 15px;
+        right: 20px;
+      }
+
+      .modal-like {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        top: 15px;
+        left: 20px;
+      }
+    }
+
+    /* Staggered animation delay */
+    .image-container:nth-child(1) { animation-delay: 0.1s; }
+    .image-container:nth-child(2) { animation-delay: 0.2s; }
+    .image-container:nth-child(3) { animation-delay: 0.3s; }
+    .image-container:nth-child(4) { animation-delay: 0.4s; }
+    .image-container:nth-child(5) { animation-delay: 0.5s; }
+    .image-container:nth-child(6) { animation-delay: 0.6s; }
+    .image-container:nth-child(n+7) { animation-delay: 0.7s; }
+  </style>
+</head>
+<body>
+  <h1>Marriage</h1>
+  <div class="gallery" id="marriage-gallery">
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=1" alt="Marriage Decoration 1" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=2" alt="Marriage Decoration 2" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=3" alt="Marriage Decoration 3" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=4" alt="Marriage Decoration 4" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=5" alt="Marriage Decoration 5" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=6" alt="Marriage Decoration 6" data-category="marriage">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+  </div>
+
+  <h1>Mehendi</h1>
+  <div class="gallery" id="mehendi-gallery">
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=11" alt="Mehendi Decoration 1" data-category="mehendi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=12" alt="Mehendi Decoration 2" data-category="mehendi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=13" alt="Mehendi Decoration 3" data-category="mehendi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=14" alt="Mehendi Decoration 4" data-category="mehendi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+  </div>
+
+  <h1>Haldi Function</h1>
+  <div class="gallery" id="haldi-gallery">
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=21" alt="Haldi Decoration 1" data-category="haldi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=22" alt="Haldi Decoration 2" data-category="haldi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=23" alt="Haldi Decoration 3" data-category="haldi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+    <div class="image-container">
+      <img src="https://picsum.photos/400/300?random=24" alt="Haldi Decoration 4" data-category="haldi">
+      <button class="like-button">♡</button>
+      <div class="like-count">0 likes</div>
+    </div>
+  </div>
+
+  <!-- Modal for enlarged images -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <button class="modal-like">♡</button>
+    <button class="nav-arrow prev-arrow">‹</button>
+    <button class="nav-arrow next-arrow">›</button>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="">
+    </div>
+  </div>
+
+  <script>
+    // Image and like functionality
+    let allImages = [];
+    let currentImageIndex = 0;
+    let likes = {};
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Collect all images
+      const images = document.querySelectorAll('.image-container img');
+      allImages = Array.from(images);
+      
+      // Initialize likes counter
+      allImages.forEach((img, index) => {
+        likes[index] = 0;
+      });
+
+      // Add event listeners
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      const closeBtn = document.querySelector('.close');
+      const modalLike = document.querySelector('.modal-like');
+      const prevBtn = document.querySelector('.prev-arrow');
+      const nextBtn = document.querySelector('.next-arrow');
+
+      // Image click to open modal
+      allImages.forEach((img, index) => {
+        img.addEventListener('click', function() {
+          currentImageIndex = index;
+          showModal(img.src, img.alt);
+        });
+      });
+
+      // Like button functionality
+      document.querySelectorAll('.like-button').forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleLike(index, btn);
+        });
+      });
+
+      // Modal like button
+      modalLike.addEventListener('click', function() {
+        toggleLike(currentImageIndex, this);
+        updateGalleryLike(currentImageIndex);
+      });
+
+      // Close modal
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+      });
+
+      // Navigation arrows
+      prevBtn.addEventListener('click', showPrevImage);
+      nextBtn.addEventListener('click', showNextImage);
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (modal.classList.contains('active')) {
+          if (e.key === 'Escape') closeModal();
+          if (e.key === 'ArrowLeft') showPrevImage();
+          if (e.key === 'ArrowRight') showNextImage();
+        }
+      });
+    }
+
+    function showModal(src, alt) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      const modalLike = document.querySelector('.modal-like');
+      
+      modalImg.src = src;
+      modalImg.alt = alt;
+      
+      // Update modal like button state
+      const isLiked = document.querySelectorAll('.like-button')[currentImageIndex].classList.contains('liked');
+      modalLike.classList.toggle('liked', isLiked);
+      modalLike.innerHTML = isLiked ? '♥' : '♡';
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function showPrevImage() {
+      currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+      const img = allImages[currentImageIndex];
+      showModal(img.src, img.alt);
+    }
+
+    function showNextImage() {
+      currentImageIndex = (currentImageIndex + 1) % allImages.length;
+      const img = allImages[currentImageIndex];
+      showModal(img.src, img.alt);
+    }
+
+    function toggleLike(index, button) {
+      const isLiked = button.classList.contains('liked');
+      
+      if (isLiked) {
+        likes[index]--;
+        button.classList.remove('liked');
+        button.innerHTML = '♡';
+      } else {
+        likes[index]++;
+        button.classList.add('liked');
+        button.innerHTML = '♥';
+      }
+      
+      // Update like count display
+      const likeCountEl = button.parentElement.querySelector('.like-count');
+      if (likeCountEl) {
+        likeCountEl.textContent = `${likes[index]} like${likes[index] !== 1 ? 's' : ''}`;
+      }
+    }
+
+    function updateGalleryLike(index) {
+      const galleryLikeBtn = document.querySelectorAll('.like-button')[index];
+      const modalLikeBtn = document.querySelector('.modal-like');
+      
+      galleryLikeBtn.classList.toggle('liked', modalLikeBtn.classList.contains('liked'));
+      galleryLikeBtn.innerHTML = modalLikeBtn.innerHTML;
+      
+      // Update like count
+      const likeCountEl = galleryLikeBtn.parentElement.querySelector('.like-count');
+      likeCountEl.textContent = `${likes[index]} like${likes[index] !== 1 ? 's' : ''}`;
+    }
+  </script>
+</body>
+</html>
